@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Activity</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        font-family: "Roboto", system-ui;
+        font-weight: 400;
+        font-style: normal;
+        text-align: center;
+        background-color: #D6FFC1;
+        color: #050505;
+      }
+      #heading {
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+        margin: 10px 10px;
+        margin-bottom: 10px;
+        border-radius: 20px;
+        background-color:   #8AF0BF;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+      }
+      
+      #figures {
+        flex: 1;
+        text-align: start;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 30px;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        padding-left: 50px;
+        padding-right: 50px;
+        border-radius: 20px;
+        background-color:   #8AF0BF;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+      }
+      span {
+        color: rgb(19, 19, 50);
+      }
+      #find-button {
+        color: #030303;
+        background-color:  #97FA9A;
+        padding: 10px 15px;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        border-radius: 50px;
+        border: 2px solid #97FA9A;
+        cursor: pointer;
+        box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
+        margin-bottom: 20px;
+        transition: all 1s;
+        width: 200px;
+      }
+      #find-button:hover {
+        scale:1.03;
+        transition: all .1s;
+        opacity: .6;
+        border: 2px solid rgb(45, 2, 2);
+      }
+      #find-button:active {
+        box-shadow: none;
+        scale: 1;
+      }
+
+      #audio {
+        height: 70px;
+        width: 250px;
+      }
+      #map {
+        height: 500px;
+        border-radius: 20px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+      }
+      #latitude {
+        padding-left: 15px;
+      }
+      #velocity {
+        padding-left: 15px;
+      }
+      #altitude {
+        padding-left: 15px;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div id="heading">
+      <h1>Death Star Tracker</h1>
+    </div>
+ 
+    <div id="music">
+      <video controls autoplay id="audio">
+        <source
+          src="https://www.televisiontunes.com/uploads/audio/Star%20Wars.mp3"
+          type="audio/mpeg"
+        />
+      </video>
+    </div>
+
+
+    <div id="figures">
+      <p>
+        Latitude: <span id="latitude"></span><br />
+        Longitude: <span id="longitude"></span><br />
+        Velocity: <span id="velocity"></span><br />
+        Altitude: <span id="altitude"></span>
+      </p>
+    </div>
+
+    <div id="button-div">
+      <button id="find-button" onclick="findStar()">Find Death Star</button>
+    </div>
+
+
+    <div id="map"></div>
+
+    <script>
+
+      let flag = true;
+
+      // marker history
+
+      let marker_history = [];
+
+      // set map and starting location
+      let map = L.map("map").setView([0, 0], 4);
+
+      //setting icon marker for map
+      const ISSicon = L.icon({
+        iconUrl: 'https://img.icons8.com/?size=160&id=WEEuZTnto9WC&format=png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [-3, -76],
+      });
+
+      const xwing = L.icon({
+        iconUrl: "https://img.icons8.com/?size=96&id=mAKFHneLBzsq&format=png",
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [-3, -76],
+        
+      });
+
+      const mill = L.icon({
+        iconUrl: "https://img.icons8.com/?size=96&id=l7jGnbjoXLoJ&format=png",
+        iconSize: [30, 30],
+        iconAnchor: [20, 20],
+        popupAnchor: [-3, -76],
+        
+      });
+
+      // set marker on the map
+
+      const xwingmarker = L.marker([-80,30] , { icon: xwing , title: "XWing"}).addTo(map);
+      let xwing_lat = -70.00;
+
+      const shipmarker = L.marker ([80, -40], {icon: mill, title: 'GoodGuys'}).addTo(map);
+      let mill_lat = 70.0;
+
+      const marker = L.marker([0, 0], {
+        icon: ISSicon,
+        title: "Death Star",
+      }).addTo(map);
+
+      // load tiles into map
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+
+      async function ISSdata() {
+        const iss_url = "https://api.wheretheiss.at/v1/satellites/25544";
+
+        const response = await fetch(iss_url);
+        const iss_data = await response.json();
+
+        let { latitude, longitude, velocity, altitude } = iss_data;
+
+        document.getElementById("latitude").innerText =
+          latitude.toFixed(3) + "°";
+        document.getElementById("longitude").innerText =
+          longitude.toFixed(3) + "°";
+        document.getElementById("velocity").innerText =
+          velocity.toFixed(1) + " kph";
+        document.getElementById("altitude").innerText =
+          altitude.toFixed(1) + " km";
+
+        if (flag) {
+          map.setView([latitude, longitude], 2);
+          flag = false;
+        }
+        marker.setLatLng([latitude, longitude]);
+        
+
+        if (xwing_lat >= 80.0) {
+            xwing_lat = -80.0;
+        } else {
+            xwingmarker.setLatLng([xwing_lat, 80]);
+            xwing_lat = xwing_lat + .5;
+        }
+
+        if (mill_lat <= -70) {
+            mill_lat = 80.0;
+        } else {
+            shipmarker.setLatLng([mill_lat, -40]);
+            mill_lat = mill_lat - .1;
+        }
+      }
+
+      function findStar() {
+        flag = true;
+      }
+
+      ISSdata();
+      setInterval(ISSdata, 1000);
+      setInterval(findStar, 200000);
+    </script>
+  </body>
+</html>
