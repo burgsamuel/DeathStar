@@ -7,6 +7,7 @@
       href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,126 +27,52 @@
 
     <style>
       body {
-        display: flex;
-        flex-direction: column;
-        max-width: 950px;
-        margin-left: auto;
-        margin-right: auto;
         font-family: "Roboto", system-ui;
-        font-weight: 400;
-        font-style: normal;
-        text-align: center;
-        background-color: #D6FFC1;
-        color: #050505;
-      }
-      #heading {
-        margin-left: auto;
-        margin-right: auto;
-        justify-content: center;
-        margin: 10px 10px;
-        margin-bottom: 10px;
-        border-radius: 20px;
-        background-color:   #8AF0BF;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-      }
-      
-      #figures {
-        flex: 1;
-        text-align: start;
-        font-size: 20px;
-        font-weight: 600;
-        line-height: 30px;
-        margin-right: auto;
-        margin-left: auto;
-        margin-bottom: 20px;
-        margin-top: 20px;
-        padding-left: 50px;
-        padding-right: 50px;
-        border-radius: 20px;
-        background-color:   #8AF0BF;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-      }
-      span {
-        color: rgb(19, 19, 50);
-      }
-      #find-button {
-        color: #030303;
-        background-color:  #97FA9A;
-        padding: 10px 15px;
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        border-radius: 50px;
-        border: 2px solid #97FA9A;
-        cursor: pointer;
-        box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
-        margin-bottom: 20px;
-        transition: all 1s;
-        width: 200px;
-      }
-      #find-button:hover {
-        scale:1.03;
-        transition: all .1s;
-        opacity: .6;
-        border: 2px solid rgb(45, 2, 2);
-      }
-      #find-button:active {
-        box-shadow: none;
-        scale: 1;
-      }
-
-      #audio {
-        height: 70px;
-        width: 250px;
       }
       #map {
         height: 500px;
-        border-radius: 20px;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
       }
-      #latitude {
-        padding-left: 15px;
-      }
-      #velocity {
-        padding-left: 15px;
-      }
-      #altitude {
-        padding-left: 15px;
-      }
-
-
     </style>
   </head>
-  <body>
-    <div id="heading">
-      <h1>Death Star Tracker</h1>
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center gap-6">
+
+      <div class="w-full text-center rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 border border-indigo-800/40 shadow-lg shadow-indigo-500/10 py-6">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+          Death Star Tracker
+        </h1>
+        <p class="text-slate-400 text-sm mt-2 tracking-widest uppercase">Real-Time Orbital Tracking</p>
+      </div>
+
+      <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="rounded-xl bg-slate-900 border border-slate-800 p-4 text-center shadow-md">
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Latitude</p>
+          <p id="latitude" class="text-lg font-semibold text-cyan-400"></p>
+        </div>
+        <div class="rounded-xl bg-slate-900 border border-slate-800 p-4 text-center shadow-md">
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Longitude</p>
+          <p id="longitude" class="text-lg font-semibold text-cyan-400"></p>
+        </div>
+        <div class="rounded-xl bg-slate-900 border border-slate-800 p-4 text-center shadow-md">
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Velocity</p>
+          <p id="velocity" class="text-lg font-semibold text-violet-400"></p>
+        </div>
+        <div class="rounded-xl bg-slate-900 border border-slate-800 p-4 text-center shadow-md">
+          <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Altitude</p>
+          <p id="altitude" class="text-lg font-semibold text-violet-400"></p>
+        </div>
+      </div>
+
+      <button
+        id="find-button"
+        onclick="findStar()"
+        class="px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold text-base shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-105 active:scale-95 active:shadow-none transition-all duration-200 cursor-pointer"
+      >
+        Find Death Star Now!
+      </button>
+
+      <div id="map" class="w-full rounded-2xl border border-slate-800 shadow-xl shadow-black/30 overflow-hidden"></div>
     </div>
- 
-    <div id="music">
-      <video controls autoplay id="audio">
-        <source
-          src="https://www.televisiontunes.com/uploads/audio/Star%20Wars.mp3"
-          type="audio/mpeg"
-        />
-      </video>
-    </div>
-
-
-    <div id="figures">
-      <p>
-        Latitude: <span id="latitude"></span><br />
-        Longitude: <span id="longitude"></span><br />
-        Velocity: <span id="velocity"></span><br />
-        Altitude: <span id="altitude"></span>
-      </p>
-    </div>
-
-    <div id="button-div">
-      <button id="find-button" onclick="findStar()">Find Death Star Now!</button>
-    </div>
-
-
-    <div id="map"></div>
 
     <script>
 
@@ -156,7 +83,7 @@
       let marker_history = [];
 
       // set map and starting location
-      let map = L.map("map").setView([0, 0], 4);
+      let map = L.map("map", { attributionControl: false }).setView([0, 0], 4);
 
       //setting icon marker for map
       const ISSicon = L.icon({
@@ -171,7 +98,7 @@
         iconSize: [40, 40],
         iconAnchor: [20, 20],
         popupAnchor: [-3, -76],
-        
+
       });
 
       const mill = L.icon({
@@ -179,7 +106,7 @@
         iconSize: [30, 30],
         iconAnchor: [20, 20],
         popupAnchor: [-3, -76],
-        
+
       });
 
       // set marker on the map
@@ -196,36 +123,78 @@
       }).addTo(map);
 
       // load tiles into map
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 18,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
       }).addTo(map);
 
-      async function ISSdata() {
-        const iss_url = "https://api.wheretheiss.at/v1/satellites/25544";
+      let orbitLines = [];
 
-        const response = await fetch(iss_url);
-        const iss_data = await response.json();
-        console.log(iss_data);
+      async function fetchOrbitTrack(lat, lon) {
+        const now = Math.floor(Date.now() / 1000);
+        const allPositions = [];
 
-        let { latitude, longitude, velocity, altitude } = iss_data;
-
-        document.getElementById("latitude").innerText =
-          latitude.toFixed(3) + "°";
-        document.getElementById("longitude").innerText =
-          longitude.toFixed(3) + "°";
-        document.getElementById("velocity").innerText =
-          velocity.toFixed(1) + " kph";
-        document.getElementById("altitude").innerText =
-          altitude.toFixed(1) + " km";
-
-        if (flag) {
-          map.setView([latitude, longitude], 2);
-          flag = false;
+        for (let batch = 0; batch < 10; batch++) {
+          const timestamps = [];
+          for (let i = 0; i < 10; i++) {
+            timestamps.push(now + (batch * 10 + i) * 54);
+          }
+          const url = `https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=${timestamps.join(",")}`;
+          const res = await fetch(url);
+          if (!res.ok) break;
+          const batchData = await res.json();
+          if (batchData.error) break;
+          allPositions.push(...batchData);
+          await new Promise(r => setTimeout(r, 300));
         }
-        marker.setLatLng([latitude, longitude]);
-        
+
+        if (allPositions.length === 0) return;
+
+        orbitLines.forEach(line => map.removeLayer(line));
+        orbitLines = [];
+
+        let segment = [];
+        for (let i = 0; i < allPositions.length; i++) {
+          const p = allPositions[i];
+          if (i > 0) {
+            const prev = allPositions[i - 1];
+            if (Math.abs(p.longitude - prev.longitude) > 180) {
+              orbitLines.push(L.polyline(segment, { color: "#38bdf8", weight: 2, opacity: 0.5, dashArray: "6 8" }).addTo(map));
+              segment = [];
+            }
+          }
+          segment.push([p.latitude, p.longitude]);
+        }
+        if (segment.length > 1) {
+          orbitLines.push(L.polyline(segment, { color: "#38bdf8", weight: 2, opacity: 0.5, dashArray: "6 8" }).addTo(map));
+        }
+      }
+
+      async function ISSdata() {
+        try {
+          const iss_url = "https://api.wheretheiss.at/v1/satellites/25544";
+
+          const response = await fetch(iss_url);
+          const iss_data = await response.json();
+
+          if (iss_data.error) return;
+
+          let { latitude, longitude, velocity, altitude } = iss_data;
+
+          document.getElementById("latitude").innerText =
+            latitude.toFixed(3) + "°";
+          document.getElementById("longitude").innerText =
+            longitude.toFixed(3) + "°";
+          document.getElementById("velocity").innerText =
+            velocity.toFixed(1) + " kph";
+          document.getElementById("altitude").innerText =
+            altitude.toFixed(1) + " km";
+
+          if (flag) {
+            map.setView([latitude, longitude], 2);
+            flag = false;
+          }
+          marker.setLatLng([latitude, longitude]);
+        } catch (e) {}
 
         if (xwing_lat >= 80.0) {
             xwing_lat = -80.0;
@@ -247,7 +216,9 @@
       }
 
       ISSdata();
-      setInterval(ISSdata, 1000);
+      fetchOrbitTrack();
+      setInterval(ISSdata, 5000);
+      setInterval(fetchOrbitTrack, 300000);
       setInterval(findStar, 200000);
     </script>
   </body>
